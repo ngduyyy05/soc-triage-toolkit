@@ -1,0 +1,9 @@
+rules:
+  - match: {log_format: auth, action: ssh_failure}
+    points: 20
+    attack: [T1110.001]
+  - match: {log_format: sysmon, event_code: 10, action: lsass_access}
+    points: 15
+    attack: [T1003.001]
+  - match: {log_format: suricata, action: alert}
+    points: 35

@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "soc-triage-toolkit"
+version = "0.1.0"
+description = "Offline-first SOC log triage with optional IP and domain enrichment"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = ["PyYAML>=6.0.2,<7"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+soc-triage = "soc_triage.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+soc_triage = ["risk.yml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
