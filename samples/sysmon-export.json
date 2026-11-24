@@ -1,0 +1,12 @@
+{
+  "Event": {
+    "System": {
+      "EventID": 22,
+      "Computer": "windows.test",
+      "TimeCreated": {"@SystemTime": "2025-02-01T10:00:01Z"}
+    },
+    "EventData": {
+      "Data": [{"@Name": "QueryName", "#text": "lookup.example.test"}]
+    }
+  }
+}

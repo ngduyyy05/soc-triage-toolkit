@@ -1,0 +1,2 @@
+{"timestamp":"2025-02-01T10:00:02Z","event_type":"alert","src_ip":"192.0.2.10","dest_ip":"198.51.100.20","alert":{"signature_id":1000001,"signature":"Synthetic HTTP marker"},"http":{"hostname":"web.example.test","url":"/lab-marker"}}
+{"timestamp":"2025-02-01T10:00:02Z","event_type":"alert","src_ip":"192.0.2.10","dest_ip":"198.51.100.20","alert":{"signature_id":1000001,"signature":"Synthetic HTTP marker"},"http":{"hostname":"web.example.test","url":"/lab-marker"}}

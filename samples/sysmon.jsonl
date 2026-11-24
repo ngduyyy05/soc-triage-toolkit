@@ -1,0 +1,1 @@
+{"@timestamp":"2025-02-01T10:00:00Z","host":{"name":"windows.test"},"winlog":{"event_id":10,"event_data":{"SourceImage":"C:\\Lab\\reader.exe","TargetImage":"C:\\Windows\\System32\\lsass.exe","Hashes":"SHA256=abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"}}}
