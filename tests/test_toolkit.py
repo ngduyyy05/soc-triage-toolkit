@@ -48,25 +48,27 @@ def test_enrichment_both_providers_and_domain(monkeypatch):
         return {"data": {"attributes": {"last_analysis_stats": {"malicious": 2}}}}
 
     env = {"ABUSEIPDB_API_KEY": "mock-only", "VIRUSTOTAL_API_KEY": "mock-only"}
-    monkeypatch.setattr("ipaddress.IPv4Address.is_global", property(lambda _: True))
+    monkeypatch.setattr("soc_triage.enrichment._public", lambda _: True)
     ip = Indicator("ip", "192.0.2.5")
-    data = enrich([ip, ip, Indicator("domain", "lookup.example.edu")], env, requester=response)
+    data = enrich([ip, ip, Indicator("domain", "lookup.example.test")], env, requester=response)
     assert len(calls) == 3
-    assert calls[0].full_url.endswith("/domains/lookup.example.edu")
+    assert calls[0].full_url.endswith("/domains/lookup.example.test")
     assert calls[1].get_header("X-apikey") == "mock-only"
     assert "ipAddress=192.0.2.5" in calls[2].full_url
     assert data[1]["providers"]["abuseipdb"]["totalReports"] == 2
 
 
-def test_enrichment_statuses():
+def test_enrichment_statuses(monkeypatch):
     def error(request):
         raise HTTPError(request.full_url, 429, "rate limit", None, None)
 
-    records = enrich([Indicator("ip", "192.0.2.5"), Indicator("domain", "lookup.example.edu")],
-                     {"VIRUSTOTAL_API_KEY": "mock-only"}, requester=error)
+    ip = Indicator("ip", "192.0.2.5")
+    domain = Indicator("domain", "lookup.example.test")
+    assert all(record["status"] == "skipped_nonpublic" for record in enrich([ip, domain], {}))
+    monkeypatch.setattr("soc_triage.enrichment._public", lambda _: True)
+    records = enrich([domain], {"VIRUSTOTAL_API_KEY": "mock-only"}, requester=error)
     assert records[0]["providers"]["virustotal"] == {"status": "http_error", "code": 429}
-    assert records[1]["status"] == "skipped_nonpublic"
-    assert enrich([Indicator("domain", "lookup.example.edu")], {})[0]["providers"] == {
+    assert enrich([domain], {})[0]["providers"] == {
         "virustotal": {"status": "missing_key"}
     }
 
