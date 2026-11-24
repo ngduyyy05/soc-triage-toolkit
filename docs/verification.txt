@@ -1,0 +1,25 @@
+Local verification | 2026-11-24 | Python 3.13 / Windows
+Commands use the installed console entry point in a local virtual environment.
+
+$ python -m pip install --disable-pip-version-check -q -e ".[test]"
+Exit 0. Quiet mode produced no output.
+
+$ python -m pytest -q
+........                                                                 [100%]
+8 passed in 0.28s
+
+$ soc-triage --auth-year 2025 --input sysmon samples/sysmon.jsonl --input sysmon samples/sysmon-export.json --input suricata samples/eve.jsonl --input auth samples/auth.log --input csv samples/events.csv --output output
+Read 7 records; wrote 6 unique records and 8 indicators.
+Reports: output\alerts.json, output\alerts.csv, output\incident.md
+
+$ docker build --quiet -t soc-triage-toolkit .
+sha256:3a5a6452de6f90b904f3a5a54357e068cf19822887f3296161547e2f90cac6f4
+
+$ docker run --rm --network none --mount "type=bind,source=<absolute-samples-path>,target=/samples,readonly" soc-triage-toolkit --auth-year 2025 --input sysmon /samples/sysmon.jsonl --input sysmon /samples/sysmon-export.json --input suricata /samples/eve.jsonl --input auth /samples/auth.log --input csv /samples/events.csv --output /tmp/report
+Read 7 records; wrote 6 unique records and 8 indicators.
+Reports: /tmp/report/alerts.json, /tmp/report/alerts.csv, /tmp/report/incident.md
+
+$ gitleaks git --staged --no-banner --redact .
+9:45PM INF no leaks found
+
+Provider API tests used mocked responses. Live API enrichment — TODO(user): fill after running.
